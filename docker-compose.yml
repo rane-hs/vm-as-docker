@@ -1,0 +1,49 @@
+version: "3"
+services:
+  ##################################################
+  # mysql/redis/memcached
+  # 基本的に仮で本実装になったら破棄される
+  ##################################################
+  dblocal:
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: dbhttpd
+      MYSQL_PASSWORD: dbhttpd
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      TZ: 'Asia/Tokyo'
+    networks:
+        - local-nw
+  redislocal:
+    image: redis:6.0.3
+    container_name: redis-stg
+    networks:
+      - local-nw
+  ##################################################
+  # localmachine
+  ##################################################
+  local:
+    image: rane/local
+    tty: true
+    volumes:
+      - ./home:/rane/home
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /rane/home
+    environment:
+      PASTRY_ENV: stg
+      PASTRY_GOD: 1
+      FLASK_DEBUG: 1
+      TZ: 'Asia/Tokyo'
+    depends_on:
+      - dblocal
+      - mclocal
+      - redislocal
+    networks:
+      - local-nw
+    container_name: local
+    ports:
+      - "10022:22"
+      - 80:80
+      - 5000:5000
+    entrypoint: /entrypoint.sh
+networks:
+  local-nw:
