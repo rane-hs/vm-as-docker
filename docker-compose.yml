@@ -23,6 +23,7 @@ services:
   ##################################################
   local:
     image: rane/local
+    build: local/
     tty: true
     volumes:
       - ./home:/rane/home
@@ -35,7 +36,6 @@ services:
       TZ: 'Asia/Tokyo'
     depends_on:
       - dblocal
-      - mclocal
       - redislocal
     networks:
       - local-nw

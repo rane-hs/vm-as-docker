@@ -16,7 +16,7 @@ clean:
 	./local/bin/docker-clean
 
 build:
-	docker build -t rane/local ./local
+	docker-compose build
 
 start:
 	docker-compose up -d
@@ -26,6 +26,7 @@ stop:
 
 terminate:
 	docker-compose down
+	./local/bin/docker-clean
 
 ssh:
 	ssh -A rane@0.0.0.0 -p 10022
