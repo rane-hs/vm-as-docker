@@ -1,5 +1,8 @@
 # installation
+`home` sync to container
+
 ```
+mkdir ./home
 ```
 
 # how to use
